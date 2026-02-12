@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "key": "capitale_france",
+    "label": "Quelle est la capitale de la France ?",
+    "description": "Choisis la bonne ville.",
+    "type": "choice",
+    "required": true,
+    "options": [
+      "Lyon",
+      "Marseille",
+      "Paris",
+      "Bordeaux"
+    ]
+  },
+  {
+    "id": 2,
+    "key": "animal_miaule",
+    "label": "Quel animal miaule ?",
+    "description": "",
+    "type": "choice",
+    "required": true,
+    "options": [
+      "Le chien",
+      "Le chat",
+      "L'oiseau",
+      "Le poisson"
+    ]
+  },
+  {
+    "id": 3,
+    "key": "affichage_python",
+    "label": "En Python, comment affiche-t-on un message ?",
+    "description": "",
+    "type": "choice",
+    "required": true,
+    "options": [
+      "console.log('Bonjour')",
+      "echo 'Bonjour'",
+      "print('Bonjour')",
+      "System.out.println('Bonjour')"
+    ]
+  },
+  {
+    "id": 4,
+    "key": "cheval_blanc",
+    "label": "Quelle est la couleur du cheval blanc d'Henri IV ?",
+    "description": "",
+    "type": "choice",
+    "required": true,
+    "options": [
+      "Noir",
+      "Blanc",
+      "Gris",
+      "Marron"
+    ]
+  },
+  {
+    "id": 5,
+    "key": "framework_utilise",
+    "label": "Quel framework utilises-tu pour ce site ?",
+    "description": "",
+    "type": "choice",
+    "required": true,
+    "options": [
+      "Django",
+      "Laravel",
+      "React",
+      "Flask"
+    ]
+  }
+]

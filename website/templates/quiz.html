@@ -1,0 +1,96 @@
+{% extends "index.html" %}
+
+{% block title %}Questionnaire{% endblock %}
+
+{% block content %}
+<div class="card mt-4">
+  <div class="card-header text-center">
+    <h2>Questionnaire</h2>
+  </div>
+
+  <div class="card-body">
+    <form method="POST">
+      {% for q in questions %}
+      <div class="mb-4 p-3 border rounded">
+        <h5 class="text-primary">{{ loop.index }}. {{ q.label }}</h5>
+
+        {% if q.description %}
+          <p class="text-muted mb-2">{{ q.description }}</p>
+        {% endif %}
+
+        <div class="ml-1 mt-2">
+          {% if q.type == "choice" %}
+            {# Choix unique #}
+            {% for option in q.options %}
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="{{ q.key }}"
+                value="{{ option }}"
+                {% if q.required %}required{% endif %}
+              />
+              <label class="form-check-label">
+                {{ option }}
+              </label>
+            </div>
+            {% endfor %}
+
+          {% elif q.type == "multi" %}
+            {# Choix multiple #}
+            {% for option in q.options %}
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                name="{{ q.key }}[]"
+                value="{{ option }}"
+              />
+              <label class="form-check-label">
+                {{ option }}
+              </label>
+            </div>
+            {% endfor %}
+            {% if q.required %}
+              <small class="form-text text-muted">
+                (Astuce : si c’est obligatoire, il faut choisir au moins une option.)
+              </small>
+            {% endif %}
+
+          {% elif q.type == "number" %}
+            <input
+              type="number"
+              class="form-control"
+              name="{{ q.key }}"
+              {% if q.required %}required{% endif %}
+            />
+
+          {% elif q.type == "date" %}
+            <input
+              type="date"
+              class="form-control"
+              name="{{ q.key }}"
+              {% if q.required %}required{% endif %}
+            />
+
+          {% else %}
+            <input
+              type="text"
+              class="form-control"
+              name="{{ q.key }}"
+              {% if q.required %}required{% endif %}
+            />
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+
+      <div class="text-center">
+        <button type="submit" class="btn btn-primary btn-lg">
+          Envoyer
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

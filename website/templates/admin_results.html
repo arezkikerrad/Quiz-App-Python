@@ -1,0 +1,42 @@
+{% extends "index.html" %}
+
+{% block title %}Admin - Résultats {{ qid }}{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Résultats du questionnaire : {{ qid }}</h2>
+
+<div class="mb-3">
+  <a href="{{ url_for('views.admin_questionnaires') }}" class="btn btn-secondary">
+    Retour à la liste des questionnaires
+  </a>
+
+  {% if rows and fieldnames %}
+    <a href="{{ url_for('views.admin_download_results', qid=qid) }}" class="btn btn-outline-primary ml-2">
+      Télécharger le CSV
+    </a>
+  {% endif %}
+</div>
+
+{% if rows and fieldnames %}
+<table class="table table-bordered table-sm">
+  <thead>
+    <tr>
+      {% for col in fieldnames %}
+      <th>{{ col }}</th>
+      {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      {% for col in fieldnames %}
+      <td>{{ row[col] }}</td>
+      {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Aucun résultat pour ce questionnaire.</p>
+{% endif %}
+{% endblock %}

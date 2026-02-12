@@ -1,0 +1,232 @@
+{% extends "index.html" %}
+
+{% block title %}Admin - Créer questionnaire{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Créer un nouveau questionnaire</h2>
+
+<form method="POST" class="card p-4 shadow-sm">
+  <div class="form-group">
+    <label for="qid"><strong>Identifiant du questionnaire</strong> (nom du fichier sans .json)</label>
+    <input type="text" class="form-control" name="qid" required placeholder="ex: satisfaction, cours_python">
+    <small class="form-text text-muted">
+      Utilise des mots simples (lettres/chiffres). Les espaces seront transformés automatiquement.
+    </small>
+  </div>
+
+  <hr>
+
+  <div class="d-flex align-items-center justify-content-between">
+    <h4 class="mb-0">Questions</h4>
+    <button type="button" id="add-question" class="btn btn-outline-primary btn-sm">
+      + Ajouter une question
+    </button>
+  </div>
+
+  <div id="questions-container" class="mt-3">
+    <!-- Injecté par JS -->
+  </div>
+
+  <div class="mt-4 d-flex justify-content-end">
+    <button type="submit" class="btn btn-success">
+      Créer le questionnaire
+    </button>
+  </div>
+</form>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const container = document.getElementById('questions-container');
+    const addQuestionBtn = document.getElementById('add-question');
+
+    let nextQuestionIndex = 0;
+
+    function makeOptionRow(qIndex, optIndex) {
+      return `
+        <div class="input-group mb-2 option-row" data-opt-index="${optIndex}">
+          <div class="input-group-prepend">
+            <span class="input-group-text">Option ${optIndex}</span>
+          </div>
+          <input type="text"
+                 class="form-control"
+                 name="option_${qIndex}_${optIndex}"
+                 placeholder="Texte de l'option ${optIndex}">
+          <div class="input-group-append">
+            <button type="button" class="btn btn-outline-danger remove-option">Supprimer</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function makeQuestionBlock(qIndex) {
+      return `
+        <div class="question-block border rounded p-3 mb-3" data-q-index="${qIndex}">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Question ${qIndex}</h5>
+            <button type="button" class="btn btn-outline-danger btn-sm remove-question">
+              Supprimer la question
+            </button>
+          </div>
+
+          <div class="row mt-3">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label>Clé (unique, pour le CSV)</label>
+                <input type="text" class="form-control" name="key_${qIndex}" placeholder="ex: age, avis, note_cours">
+                <small class="form-text text-muted">Si vide, on génère depuis l’intitulé.</small>
+              </div>
+            </div>
+
+            <div class="col-md-8">
+              <div class="form-group">
+                <label><strong>Intitulé de la question</strong></label>
+                <input type="text" class="form-control" name="label_${qIndex}" placeholder="Texte de la question">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Description (optionnel)</label>
+            <input type="text" class="form-control" name="desc_${qIndex}" placeholder="Texte d'aide (facultatif)">
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label>Type de réponse</label>
+                <select class="form-control q-type" name="type_${qIndex}">
+                  <option value="text">Texte</option>
+                  <option value="number">Nombre</option>
+                  <option value="date">Date</option>
+                  <option value="choice">Choix unique (radio)</option>
+                  <option value="multi">Choix multiple (cases à cocher)</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-6 d-flex align-items-center">
+              <div class="form-check mt-3">
+                <input class="form-check-input" type="checkbox" name="required_${qIndex}" id="required_${qIndex}">
+                <label class="form-check-label" for="required_${qIndex}">
+                  Question obligatoire
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="choice-zone mt-2 d-none">
+            <div class="d-flex align-items-center justify-content-between">
+              <label class="mb-0"><strong>Options</strong> (si type = choix)</label>
+              <button type="button" class="btn btn-outline-primary btn-sm add-option">
+                + Ajouter une option
+              </button>
+            </div>
+            <div class="options-container mt-2">
+              ${makeOptionRow(qIndex, 1)}
+            </div>
+            <small class="form-text text-muted">
+              Astuce : une option vide est ignorée.
+            </small>
+          </div>
+        </div>
+      `;
+    }
+
+    function applyTypeVisibilityFor(questionBlock) {
+      const select = questionBlock.querySelector('.q-type');
+      const choiceZone = questionBlock.querySelector('.choice-zone');
+      if (!select || !choiceZone) return;
+
+      const show = (select.value === 'choice' || select.value === 'multi');
+      choiceZone.classList.toggle('d-none', !show);
+    }
+
+    function refreshQuestionTitles() {
+      const blocks = [...container.querySelectorAll('.question-block')];
+      blocks.forEach((block, i) => {
+        const title = block.querySelector('h5');
+        title.textContent = `Question ${i + 1}`;
+      });
+    }
+
+    function addQuestion() {
+      nextQuestionIndex += 1;
+      container.insertAdjacentHTML('beforeend', makeQuestionBlock(nextQuestionIndex));
+      const block = container.querySelector(`[data-q-index="${nextQuestionIndex}"]`);
+      applyTypeVisibilityFor(block);
+      refreshQuestionTitles();
+    }
+
+    // Ajouter 1 question au chargement
+    addQuestion();
+
+    addQuestionBtn.addEventListener('click', addQuestion);
+
+    // Delegation d'évènements
+    container.addEventListener('change', function (e) {
+      if (e.target.classList.contains('q-type')) {
+        const block = e.target.closest('.question-block');
+        applyTypeVisibilityFor(block);
+      }
+    });
+
+    container.addEventListener('click', function (e) {
+      const target = e.target;
+
+      // supprimer question
+      if (target.classList.contains('remove-question')) {
+        const block = target.closest('.question-block');
+        if (!block) return;
+        block.remove();
+        refreshQuestionTitles();
+        return;
+      }
+
+      // ajouter option
+      if (target.classList.contains('add-option')) {
+        const block = target.closest('.question-block');
+        const qIndex = block.getAttribute('data-q-index');
+        const optionsContainer = block.querySelector('.options-container');
+        const rows = optionsContainer.querySelectorAll('.option-row');
+        const nextOpt = rows.length + 1;
+
+        optionsContainer.insertAdjacentHTML('beforeend', makeOptionRow(qIndex, nextOpt));
+        return;
+      }
+
+      // supprimer option
+      if (target.classList.contains('remove-option')) {
+        const block = target.closest('.question-block');
+        const optionsContainer = block.querySelector('.options-container');
+        const rows = optionsContainer.querySelectorAll('.option-row');
+
+        if (rows.length <= 1) {
+          // on garde au moins une option
+          return;
+        }
+
+        target.closest('.option-row').remove();
+
+        // renumérotation + correction des name option_{q}_{i}
+        const qIndex = block.getAttribute('data-q-index');
+        const remaining = [...optionsContainer.querySelectorAll('.option-row')];
+        remaining.forEach((row, i) => {
+          const optIndex = i + 1;
+          row.setAttribute('data-opt-index', optIndex);
+
+          const badge = row.querySelector('.input-group-text');
+          if (badge) badge.textContent = `Option ${optIndex}`;
+
+          const input = row.querySelector('input');
+          if (input) {
+            input.name = `option_${qIndex}_${optIndex}`;
+            input.placeholder = `Texte de l'option ${optIndex}`;
+          }
+        });
+
+        return;
+      }
+    });
+  });
+</script>
+{% endblock %}

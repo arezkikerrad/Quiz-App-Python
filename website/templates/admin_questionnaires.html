@@ -1,0 +1,66 @@
+{% extends "index.html" %}
+
+{% block title %}Admin - Questionnaires{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Questionnaires disponibles</h2>
+
+<div class="mb-3">
+  <a href="{{ url_for('views.admin_upload_questionnaire') }}" class="btn btn-sm btn-outline-primary mr-2">
+    Importer un questionnaire (JSON)
+  </a>
+  <a href="{{ url_for('views.admin_create_questionnaire') }}" class="btn btn-sm btn-outline-success">
+    Créer un nouveau questionnaire
+  </a>
+</div>
+
+{% if questionnaires %}
+<table class="table table-striped align-middle">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Fichier JSON</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for q in questionnaires %}
+    <tr>
+      <td>{{ q.id }}</td>
+      <td>{{ q.filename }}</td>
+      <td>
+
+        <!-- Répondre -->
+        <a href="{{ url_for('views.questionnaire', qid=q.id) }}"
+           class="btn btn-sm btn-primary">
+          Répondre
+        </a>
+
+        <!-- Voir résultats -->
+        <a href="{{ url_for('views.admin_questionnaire_results', qid=q.id) }}"
+           class="btn btn-sm btn-secondary">
+          Voir résultats
+        </a>
+
+        <!-- Supprimer -->
+        <form method="POST"
+              action="{{ url_for('views.admin_delete_questionnaire', qid=q.id) }}"
+              style="display:inline;"
+              onsubmit="return confirm('⚠️ Supprimer définitivement ce questionnaire et tous ses résultats ?');">
+          <button type="submit" class="btn btn-sm btn-danger">
+            Supprimer
+          </button>
+        </form>
+
+        {% if not q.has_results %}
+          <span class="text-muted ml-2">(aucun résultat)</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p>Aucun questionnaire trouvé dans le dossier <code>questionnaire/</code>.</p>
+{% endif %}
+{% endblock %}

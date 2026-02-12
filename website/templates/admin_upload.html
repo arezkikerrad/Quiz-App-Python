@@ -1,0 +1,16 @@
+{% extends "index.html" %}
+
+{% block title %}Admin - Importer questionnaire{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Importer un questionnaire (fichier JSON)</h2>
+
+<form method="POST" enctype="multipart/form-data" class="card p-4 shadow-sm" style="max-width: 500px;">
+  <div class="form-group">
+    <label for="file">Fichier JSON</label>
+    <input type="file" class="form-control-file" name="file" accept=".json" required>
+  </div>
+
+  <button type="submit" class="btn btn-primary mt-2">Importer</button>
+</form>
+{% endblock %}

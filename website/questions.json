@@ -1,0 +1,57 @@
+[
+    {
+        "id": 1,
+        "question": "Quelle est la capitale de la France ?",
+        "options": [
+            "Lyon",
+            "Marseille",
+            "Paris",
+            "Bordeaux"
+        ],
+        "reponse": "Paris"
+    },
+    {
+        "id": 2,
+        "question": "Quel animal miaule ?",
+        "options": [
+            "Le chien",
+            "Le chat",
+            "L'oiseau",
+            "Le poisson"
+        ],
+        "reponse": "Le chat"
+    },
+    {
+        "id": 3,
+        "question": "En Python, comment affiche-t-on un message ?",
+        "options": [
+            "console.log('Bonjour')",
+            "echo 'Bonjour'",
+            "print('Bonjour')",
+            "System.out.println('Bonjour')"
+        ],
+        "reponse": "print('Bonjour')"
+    },
+    {
+        "id": 4,
+        "question": "Quelle est la couleur du cheval blanc d'Henri IV ?",
+        "options": [
+            "Noir",
+            "Blanc",
+            "Gris",
+            "Marron"
+        ],
+        "reponse": "Blanc"
+    },
+    {
+        "id": 5,
+        "question": "Quel framework utilises-tu pour ce site ?",
+        "options": [
+            "Django",
+            "Laravel",
+            "React",
+            "Flask"
+        ],
+        "reponse": "Flask"
+    }
+]

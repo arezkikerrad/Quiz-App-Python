@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "key": "1",
+    "label": "test",
+    "description": "jsp",
+    "type": "choice",
+    "required": false,
+    "options": [
+      "Ui"
+    ]
+  }
+]

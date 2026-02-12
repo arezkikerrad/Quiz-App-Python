@@ -1,0 +1,59 @@
+{
+  "questions": [
+    {
+      "key": "prenom",
+      "label": "Prénom",
+      "description": "Entrez votre prénom",
+      "type": "text",
+      "required": true
+    },
+    {
+      "key": "age",
+      "label": "Âge",
+      "description": "Votre âge en années",
+      "type": "number",
+      "required": true
+    },
+    {
+      "key": "date_naissance",
+      "label": "Date de naissance",
+      "description": "Sélectionnez votre date de naissance",
+      "type": "date",
+      "required": true
+    },
+    {
+      "key": "niveau_etude",
+      "label": "Niveau d'étude",
+      "description": "Quel est votre niveau d'étude actuel ?",
+      "type": "choice",
+      "required": true,
+      "options": [
+        "Lycée",
+        "Licence",
+        "Master",
+        "Doctorat"
+      ]
+    },
+    {
+      "key": "langages",
+      "label": "Langages de programmation connus",
+      "description": "Vous pouvez sélectionner plusieurs réponses",
+      "type": "multi",
+      "required": true,
+      "options": [
+        "Python",
+        "Java",
+        "C",
+        "JavaScript",
+        "PHP"
+      ]
+    },
+    {
+      "key": "commentaire",
+      "label": "Commentaire libre",
+      "description": "Facultatif",
+      "type": "text",
+      "required": false
+    }
+  ]
+}

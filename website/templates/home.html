@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block content %}
+<h1 class="text-center mb-4">Bienvenue sur OnlineQuiz</h1>
+
+{% if user.is_authenticated %}
+  <p class="text-center">Bonjour <strong>{{ user.first_name }}</strong> !</p>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('views.quiz') }}" class="btn btn-primary btn-lg">
+      Accéder au questionnaire
+    </a>
+  </div>
+
+  {% if user.is_admin %}
+    <div class="text-center mt-3">
+      <a href="{{ url_for('views.admin_questionnaires') }}" class="btn btn-outline-secondary">
+        Interface administrateur
+      </a>
+    </div>
+  {% endif %}
+
+{% else %}
+  <p class="text-center">Veuillez vous connecter pour accéder aux questionnaires.</p>
+
+  <div class="text-center mt-4">
+    <a href="{{ url_for('auth.login') }}" class="btn btn-success btn-lg">Login</a>
+    <a href="{{ url_for('auth.sign_up') }}" class="btn btn-outline-primary btn-lg">Sign Up</a>
+  </div>
+{% endif %}
+{% endblock %}

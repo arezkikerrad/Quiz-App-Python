@@ -1,0 +1,4 @@
+date;user_id;user_name;user_email;capitale_france;animal_miaule;affichage_python;cheval_blanc;framework_utilise
+07/12/2025;1;yoyo;yo@yoyo.fr;Lyon;Le chien;print('Bonjour');Noir;Django
+07/12/2025;2;gg;gg@g.fr;Lyon;Le chien;echo 'Bonjour';Noir;Django
+07/12/2025;2;gg;gg@g.fr;Lyon;Le chat;console.log('Bonjour');Noir;Django
